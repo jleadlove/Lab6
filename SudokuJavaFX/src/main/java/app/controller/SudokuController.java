@@ -323,6 +323,9 @@ public class SudokuController implements Initializable {
 							Cell CellFrom = (Cell) db.getContent(myFormat);
 
 							if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
+								
+								game.getSudoku().addMistake(1);
+								
 								if (game.getShowHints()) {
 
 								}
