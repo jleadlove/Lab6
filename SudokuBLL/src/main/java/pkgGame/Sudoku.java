@@ -49,6 +49,8 @@ public class Sudoku extends LatinSquare implements Serializable {
 	private HashMap<Integer, SudokuCell> cells = new HashMap<Integer, SudokuCell>();
 
 	private eGameDifficulty eGameDifficulty;
+	
+	private int mistakes = 0;
 
 	/**
 	 * Sudoku - No-arg private constructor should set the eGameDifficulty to EASY by
@@ -133,6 +135,14 @@ public class Sudoku extends LatinSquare implements Serializable {
 			throw new Exception("Invalid size");
 		}
 
+	}
+	
+	public int getMistakes() {
+		return mistakes;
+	}
+	
+	public void addMistake(int numMade) {
+		mistakes = mistakes + numMade;
 	}
 
 	public int getiSqrtSize() {
