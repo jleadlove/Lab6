@@ -367,9 +367,10 @@ public class SudokuController implements Initializable {
 				}
 
 			}
-
-			return gridPaneSudoku;
 		}
+
+		return gridPaneSudoku;
+
 	}
 
 	private Image GetImage(int iValue) {
