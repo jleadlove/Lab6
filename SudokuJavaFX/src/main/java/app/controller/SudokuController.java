@@ -339,7 +339,7 @@ public class SudokuController implements Initializable {
 									game.getSudoku().addMistake(1);
 
 									if (game.getSudoku().getMistakes() >= eGD.getMaxMistakes()) {
-										// kill the game
+										isRunning = false;
 										// display message
 									}
 
