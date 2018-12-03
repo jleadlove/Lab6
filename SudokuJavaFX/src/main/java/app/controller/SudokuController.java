@@ -60,6 +60,8 @@ public class SudokuController implements Initializable {
 	@FXML
 	private HBox hboxNumbers;
 
+	private boolean isRunning;
+
 	private int iCellSize = 45;
 	private static final DataFormat myFormat = new DataFormat("com.cisc181.Data.Cell");
 
@@ -89,7 +91,8 @@ public class SudokuController implements Initializable {
 	}
 
 	/**
-	 * CreateSudokuInstance - Create an instance of Sudoku, set the attribute in the 'Game' class
+	 * CreateSudokuInstance - Create an instance of Sudoku, set the attribute in the
+	 * 'Game' class
 	 * 
 	 * @version 1.5
 	 * @since Lab #5
@@ -98,6 +101,7 @@ public class SudokuController implements Initializable {
 	private void CreateSudokuInstance() {
 		eGD = this.game.geteGameDifficulty();
 		s = game.StartSudoku(this.game.getPuzzleSize(), eGD);
+		isRunning = true;
 	}
 
 	/**
@@ -130,7 +134,8 @@ public class SudokuController implements Initializable {
 	}
 
 	/**
-	 * BuildTopGrid - This is the grid at the top of the scene.  I'd stash 'difficulty', {@link #btnStartGame(ActionEvent)}of mistakes, etc
+	 * BuildTopGrid - This is the grid at the top of the scene. I'd stash
+	 * 'difficulty', {@link #btnStartGame(ActionEvent)}of mistakes, etc
 	 * 
 	 * @version 1.5
 	 * @since Lab #5
@@ -154,8 +159,9 @@ public class SudokuController implements Initializable {
 	}
 
 	/**
-	 * BuildNumbersGrid - This is the 'numbers' grid... a grid of the avaiable numbers based on the
-	 * flavor of the game.  If you're playing 4x4, you'll get numbers 1, 2, 3, 4.
+	 * BuildNumbersGrid - This is the 'numbers' grid... a grid of the avaiable
+	 * numbers based on the flavor of the game. If you're playing 4x4, you'll get
+	 * numbers 1, 2, 3, 4.
 	 * 
 	 * @version 1.5
 	 * @since Lab #5
@@ -185,10 +191,12 @@ public class SudokuController implements Initializable {
 
 			// This is going to fire if the number from the number grid is dragged
 			// Find the cell in the pane, put it on the Dragboard
-			
-			//	Pay close attention... this is the method you must code to make your item draggable.
-			//	If you want a paneTarget draggable (so you can drag it into the trash), you'll have to 
-			//	implement a simliar method
+
+			// Pay close attention... this is the method you must code to make your item
+			// draggable.
+			// If you want a paneTarget draggable (so you can drag it into the trash),
+			// you'll have to
+			// implement a simliar method
 			paneSource.setOnDragDetected(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent event) {
 
@@ -211,21 +219,22 @@ public class SudokuController implements Initializable {
 	}
 
 	/**
-	 * BuildSudokuGrid - This is the main Sudoku grid.  It cheats and uses SudokuStyler class to figure out the border
-	 *	widths.  There are also methods implemented for drag/drop.
+	 * BuildSudokuGrid - This is the main Sudoku grid. It cheats and uses
+	 * SudokuStyler class to figure out the border widths. There are also methods
+	 * implemented for drag/drop.
 	 *
-	 *	Example:
-	 *	paneTarget.setOnMouseClicked - fires if the user clicks a paneTarget cell
-	 *	paneTarget.setOnDragOver - fires if the user drags over a paneTarget cell
-	 *	paneTarget.setOnDragEntered - fires as the user enters the draggable cell
-	 *	paneTarget.setOnDragExited - fires as the user exits the draggable cell
-	 *	paneTarget.setOnDragDropped - fires after the user drops a draggable item onto the paneTarget
+	 * Example: paneTarget.setOnMouseClicked - fires if the user clicks a paneTarget
+	 * cell paneTarget.setOnDragOver - fires if the user drags over a paneTarget
+	 * cell paneTarget.setOnDragEntered - fires as the user enters the draggable
+	 * cell paneTarget.setOnDragExited - fires as the user exits the draggable cell
+	 * paneTarget.setOnDragDropped - fires after the user drops a draggable item
+	 * onto the paneTarget
 	 * 
 	 * @version 1.5
 	 * @since Lab #5
 	 * @param event
 	 */
-	
+
 	private GridPane BuildSudokuGrid() {
 
 		Sudoku s = this.game.getSudoku();
@@ -237,127 +246,130 @@ public class SudokuController implements Initializable {
 		gridPaneSudoku.setMaxWidth(iCellSize * s.getiSize());
 		gridPaneSudoku.setMaxHeight(iCellSize * s.getiSize());
 
-		for (int iCol = 0; iCol < s.getiSize(); iCol++) {
-			gridPaneSudoku.getColumnConstraints().add(SudokuStyler.getGenericColumnConstraint(iCellSize));
-			gridPaneSudoku.getRowConstraints().add(SudokuStyler.getGenericRowConstraint(iCellSize));
+		if (isRunning == true) {
 
-			for (int iRow = 0; iRow < s.getiSize(); iRow++) {
+			for (int iCol = 0; iCol < s.getiSize(); iCol++) {
+				gridPaneSudoku.getColumnConstraints().add(SudokuStyler.getGenericColumnConstraint(iCellSize));
+				gridPaneSudoku.getRowConstraints().add(SudokuStyler.getGenericRowConstraint(iCellSize));
 
-				// The image control is going to be added to a StackPane, which can be centered
+				for (int iRow = 0; iRow < s.getiSize(); iRow++) {
 
-				SudokuCell paneTarget = new SudokuCell(new Cell(iRow, iCol));
+					// The image control is going to be added to a StackPane, which can be centered
 
-				if (s.getPuzzle()[iRow][iCol] != 0) {
-					ImageView iv = new ImageView(GetImage(s.getPuzzle()[iRow][iCol]));
-					paneTarget.getCell().setiCellValue(s.getPuzzle()[iRow][iCol]);
-					paneTarget.getChildren().add(iv);
-				}
+					SudokuCell paneTarget = new SudokuCell(new Cell(iRow, iCol));
 
-				paneTarget.getStyleClass().clear(); // Clear any errant styling in the pane
-				paneTarget.setStyle(ss.getStyle(new Cell(iRow, iCol))); // Set the styling.
-
-				paneTarget.setOnMouseClicked(e -> {
-					System.out.println(paneTarget.getCell().getiCellValue());
-				});
-
-				// Fire this method as something is being dragged over a cell
-				// I'm checking the cell value... if it's not zero... don't let it be dropped
-				// (show the circle-with-line-through)
-				paneTarget.setOnDragOver(new EventHandler<DragEvent>() {
-					public void handle(DragEvent event) {
-						if (event.getGestureSource() != paneTarget && event.getDragboard().hasContent(myFormat)) {
-							// Don't let the user drag over items that already have a cell value set
-							if (paneTarget.getCell().getiCellValue() == 0) {
-								event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-							}
-						}
-						event.consume();
+					if (s.getPuzzle()[iRow][iCol] != 0) {
+						ImageView iv = new ImageView(GetImage(s.getPuzzle()[iRow][iCol]));
+						paneTarget.getCell().setiCellValue(s.getPuzzle()[iRow][iCol]);
+						paneTarget.getChildren().add(iv);
 					}
-				});
 
-				// Fire this method as something is entering the item being dragged
-				paneTarget.setOnDragEntered(new EventHandler<DragEvent>() {
-					public void handle(DragEvent event) {
-						/* show to the user that it is an actual gesture target */
-						if (event.getGestureSource() != paneTarget && event.getDragboard().hasContent(myFormat)) {
-							Dragboard db = event.getDragboard();
-							Cell CellFrom = (Cell) db.getContent(myFormat);
-							Cell CellTo = (Cell) paneTarget.getCell();
-							if (CellTo.getiCellValue() == 0) {
-								if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
-									if (game.getShowHints()) {
-										paneTarget.getChildren().add(0, SudokuStyler.getRedPane());
+					paneTarget.getStyleClass().clear(); // Clear any errant styling in the pane
+					paneTarget.setStyle(ss.getStyle(new Cell(iRow, iCol))); // Set the styling.
+
+					paneTarget.setOnMouseClicked(e -> {
+						System.out.println(paneTarget.getCell().getiCellValue());
+					});
+
+					// Fire this method as something is being dragged over a cell
+					// I'm checking the cell value... if it's not zero... don't let it be dropped
+					// (show the circle-with-line-through)
+					paneTarget.setOnDragOver(new EventHandler<DragEvent>() {
+						public void handle(DragEvent event) {
+							if (event.getGestureSource() != paneTarget && event.getDragboard().hasContent(myFormat)) {
+								// Don't let the user drag over items that already have a cell value set
+								if (paneTarget.getCell().getiCellValue() == 0) {
+									event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+								}
+							}
+							event.consume();
+						}
+					});
+
+					// Fire this method as something is entering the item being dragged
+					paneTarget.setOnDragEntered(new EventHandler<DragEvent>() {
+						public void handle(DragEvent event) {
+							/* show to the user that it is an actual gesture target */
+							if (event.getGestureSource() != paneTarget && event.getDragboard().hasContent(myFormat)) {
+								Dragboard db = event.getDragboard();
+								Cell CellFrom = (Cell) db.getContent(myFormat);
+								Cell CellTo = (Cell) paneTarget.getCell();
+								if (CellTo.getiCellValue() == 0) {
+									if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
+										if (game.getShowHints()) {
+											paneTarget.getChildren().add(0, SudokuStyler.getRedPane());
+										}
 									}
 								}
 							}
+							event.consume();
 						}
-						event.consume();
-					}
-				});
+					});
 
-				paneTarget.setOnDragExited(new EventHandler<DragEvent>() {
-					public void handle(DragEvent event) {
-						SudokuStyler.RemoveGridStyling(gridPaneSudoku);
-						ObservableList<Node> childs = paneTarget.getChildren();
-						for (Object o : childs) {
-							if (o instanceof Pane)
-								paneTarget.getChildren().remove(o);
-						}
-						event.consume();
-					}
-				});
-
-				paneTarget.setOnDragDropped(new EventHandler<DragEvent>() {
-					public void handle(DragEvent event) {
-						Dragboard db = event.getDragboard();
-						boolean success = false;
-						Cell CellTo = (Cell) paneTarget.getCell();
-
-						//TODO: This is where you'll find mistakes.  
-						//		Keep track of mistakes... as an attribute of Sudoku... start the attribute
-						//		at zero, and expose a AddMistake(int) method in Sudoku to add the mistake
-						//		write a getter so you can the value
-						//		Might even have a max mistake attribute in eGameDifficulty (easy has 2 mistakes, medium 4, etc)
-						//		If the number of mistakes >= max mistakes, end the game
-						if (db.hasContent(myFormat)) {
-							Cell CellFrom = (Cell) db.getContent(myFormat);
-
-							if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
-								
-								game.getSudoku().addMistake(1);
-								
-								if (game.getSudoku().getMistakes() >= eGD.getMaxMistakes()) {
-									//kill the game
-									//display message
-								}
-									
-								
-								if (game.getShowHints()) {
-
-								}
-
+					paneTarget.setOnDragExited(new EventHandler<DragEvent>() {
+						public void handle(DragEvent event) {
+							SudokuStyler.RemoveGridStyling(gridPaneSudoku);
+							ObservableList<Node> childs = paneTarget.getChildren();
+							for (Object o : childs) {
+								if (o instanceof Pane)
+									paneTarget.getChildren().remove(o);
 							}
-
-							//	This is the code that is actually taking the cell value from the drag-from 
-							//	cell and dropping a new Image into the dragged-to cell
-							ImageView iv = new ImageView(GetImage(CellFrom.getiCellValue()));
-							paneTarget.getCell().setiCellValue(CellFrom.getiCellValue());
-							paneTarget.getChildren().clear();
-							paneTarget.getChildren().add(iv);
-							System.out.println(CellFrom.getiCellValue());
-							success = true;
+							event.consume();
 						}
-						event.setDropCompleted(success);
-						event.consume();
-					}
-				});
+					});
 
-				gridPaneSudoku.add(paneTarget, iCol, iRow); // Add the pane to the grid
+					paneTarget.setOnDragDropped(new EventHandler<DragEvent>() {
+						public void handle(DragEvent event) {
+							Dragboard db = event.getDragboard();
+							boolean success = false;
+							Cell CellTo = (Cell) paneTarget.getCell();
+
+							// TODO: This is where you'll find mistakes.
+							// Keep track of mistakes... as an attribute of Sudoku... start the attribute
+							// at zero, and expose a AddMistake(int) method in Sudoku to add the mistake
+							// write a getter so you can the value
+							// Might even have a max mistake attribute in eGameDifficulty (easy has 2
+							// mistakes, medium 4, etc)
+							// If the number of mistakes >= max mistakes, end the game
+							if (db.hasContent(myFormat)) {
+								Cell CellFrom = (Cell) db.getContent(myFormat);
+
+								if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
+
+									game.getSudoku().addMistake(1);
+
+									if (game.getSudoku().getMistakes() >= eGD.getMaxMistakes()) {
+										// kill the game
+										// display message
+									}
+
+									if (game.getShowHints()) {
+
+									}
+
+								}
+
+								// This is the code that is actually taking the cell value from the drag-from
+								// cell and dropping a new Image into the dragged-to cell
+								ImageView iv = new ImageView(GetImage(CellFrom.getiCellValue()));
+								paneTarget.getCell().setiCellValue(CellFrom.getiCellValue());
+								paneTarget.getChildren().clear();
+								paneTarget.getChildren().add(iv);
+								System.out.println(CellFrom.getiCellValue());
+								success = true;
+							}
+							event.setDropCompleted(success);
+							event.consume();
+						}
+					});
+
+					gridPaneSudoku.add(paneTarget, iCol, iRow); // Add the pane to the grid
+				}
+
 			}
 
+			return gridPaneSudoku;
 		}
-
-		return gridPaneSudoku;
 	}
 
 	private Image GetImage(int iValue) {
