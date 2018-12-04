@@ -114,10 +114,10 @@ public class SudokuController implements Initializable {
 	private void BuildGrids() {
 
 		// Paint the top grid on the form
-		BuildTopGrid(eGD);
+		BuildTopGrid(game.getSudoku().getMistakes());
 		GridPane gridSudoku = BuildSudokuGrid();
 
-		// gridSudoku.getStyleClass().add("GridPane");
+		gridSudoku.getStyleClass().add("GridPane");
 
 		// Clear the hboxGrid, add the Sudoku puzzle
 		hboxGrid.getChildren().clear(); // Clear any controls in the VBox
@@ -157,6 +157,40 @@ public class SudokuController implements Initializable {
 
 		gpTop.getStyleClass().add("GridPaneInsets");
 	}
+	
+	private void BuildTopGrid(int numMistakes) {
+		gpTop.getChildren().clear();
+
+		Label lblDifficulty = new Label("Mistakes: " + Integer.toString(game.getSudoku().getMistakes()));
+		gpTop.add(lblDifficulty, 1, 0);
+
+		ColumnConstraints colCon = new ColumnConstraints();
+		colCon.halignmentProperty().set(HPos.CENTER);
+		gpTop.getColumnConstraints().add(colCon);
+
+		RowConstraints rowCon = new RowConstraints();
+		rowCon.valignmentProperty().set(VPos.CENTER);
+		gpTop.getRowConstraints().add(rowCon);
+
+		gpTop.getStyleClass().add("GridPaneInsets");
+	}
+	
+	private void BuildTopGrid(String message) {
+		gpTop.getChildren().clear();
+
+		Label lblDifficulty = new Label(message);
+		gpTop.add(lblDifficulty, 1, 0);
+
+		ColumnConstraints colCon = new ColumnConstraints();
+		colCon.halignmentProperty().set(HPos.CENTER);
+		gpTop.getColumnConstraints().add(colCon);
+
+		RowConstraints rowCon = new RowConstraints();
+		rowCon.valignmentProperty().set(VPos.CENTER);
+		gpTop.getRowConstraints().add(rowCon);
+
+		gpTop.getStyleClass().add("GridPaneInsets");
+	}
 
 	/**
 	 * BuildNumbersGrid - This is the 'numbers' grid... a grid of the avaiable
@@ -167,6 +201,7 @@ public class SudokuController implements Initializable {
 	 * @since Lab #5
 	 * @param event
 	 */
+	
 	private GridPane BuildNumbersGrid() {
 		Sudoku s = this.game.getSudoku();
 		SudokuStyler ss = new SudokuStyler(s);
@@ -337,9 +372,11 @@ public class SudokuController implements Initializable {
 								if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
 
 									game.getSudoku().addMistake(1);
+									System.out.println(game.getSudoku().getMistakes());
+									BuildTopGrid(game.getSudoku().getMistakes());
 
 									if (game.getSudoku().getMistakes() >= eGD.getMaxMistakes()) {
-										isRunning = false;
+										BuildTopGrid("GAME OVER");
 										// display message
 									}
 
@@ -355,12 +392,14 @@ public class SudokuController implements Initializable {
 								paneTarget.getCell().setiCellValue(CellFrom.getiCellValue());
 								paneTarget.getChildren().clear();
 								paneTarget.getChildren().add(iv);
-								System.out.println(CellFrom.getiCellValue());
+								//System.out.println(CellFrom.getiCellValue());
 								success = true;
 							}
 							event.setDropCompleted(success);
 							event.consume();
 						}
+
+						
 					});
 
 					gridPaneSudoku.add(paneTarget, iCol, iRow); // Add the pane to the grid
