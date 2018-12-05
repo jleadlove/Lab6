@@ -27,6 +27,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
@@ -67,7 +68,7 @@ public class SudokuController implements Initializable {
 
 	private eGameDifficulty eGD = null;
 	private Sudoku s = null;
-
+	private int [][] originalPuzzle;
 	public void setMainApp(Game game) {
 		this.game = game;
 	}
@@ -101,6 +102,7 @@ public class SudokuController implements Initializable {
 	private void CreateSudokuInstance() {
 		eGD = this.game.geteGameDifficulty();
 		s = game.StartSudoku(this.game.getPuzzleSize(), eGD);
+		this.originalPuzzle = this.game.getSudoku().getPuzzle();
 		isRunning = true;
 	}
 
@@ -400,6 +402,22 @@ public class SudokuController implements Initializable {
 						}
 
 						
+					});
+					paneTarget.setOnMouseClicked(new EventHandler<MouseEvent>() {
+						// Code tests for right click, if it is right click on cell that is originally zero, reset pane
+						public void handle(MouseEvent event) {
+							if(event.getButton() == MouseButton.SECONDARY) {
+								int iRow = paneTarget.getCell().getiRow();
+								int iCol = paneTarget.getCell().getiCol();
+								if(originalPuzzle[iRow][iCol]==0) {
+									paneTarget.getChildren().clear();
+									paneTarget.getCell().setiCellValue(0);
+									
+								}
+						
+							
+							}
+						}
 					});
 
 					gridPaneSudoku.add(paneTarget, iCol, iRow); // Add the pane to the grid
