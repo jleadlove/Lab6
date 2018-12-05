@@ -283,7 +283,6 @@ public class SudokuController implements Initializable {
 		gridPaneSudoku.setMaxWidth(iCellSize * s.getiSize());
 		gridPaneSudoku.setMaxHeight(iCellSize * s.getiSize());
 
-		if (isRunning == true) {
 
 			for (int iCol = 0; iCol < s.getiSize(); iCol++) {
 				gridPaneSudoku.getColumnConstraints().add(SudokuStyler.getGenericColumnConstraint(iCellSize));
@@ -357,56 +356,58 @@ public class SudokuController implements Initializable {
 
 					paneTarget.setOnDragDropped(new EventHandler<DragEvent>() {
 						public void handle(DragEvent event) {
-							Dragboard db = event.getDragboard();
-							boolean success = false;
-							Cell CellTo = (Cell) paneTarget.getCell();
-
-							// TODO: This is where you'll find mistakes.
-							// Keep track of mistakes... as an attribute of Sudoku... start the attribute
-							// at zero, and expose a AddMistake(int) method in Sudoku to add the mistake
-							// write a getter so you can the value
-							// Might even have a max mistake attribute in eGameDifficulty (easy has 2
-							// mistakes, medium 4, etc)
-							// If the number of mistakes >= max mistakes, end the game
-							if (db.hasContent(myFormat)) {
-								Cell CellFrom = (Cell) db.getContent(myFormat);
-
-								if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
-
-									game.getSudoku().addMistake(1);
-									System.out.println(game.getSudoku().getMistakes());
-									BuildTopGrid(game.getSudoku().getMistakes());
-
-									if (game.getSudoku().getMistakes() >= eGD.getMaxMistakes()) {
-										BuildTopGrid("GAME OVER");
-										// display message
+							if(isRunning == true) {
+								Dragboard db = event.getDragboard();
+								boolean success = false;
+								Cell CellTo = (Cell) paneTarget.getCell();
+	
+								// TODO: This is where you'll find mistakes.
+								// Keep track of mistakes... as an attribute of Sudoku... start the attribute
+								// at zero, and expose a AddMistake(int) method in Sudoku to add the mistake
+								// write a getter so you can the value
+								// Might even have a max mistake attribute in eGameDifficulty (easy has 2
+								// mistakes, medium 4, etc)
+								// If the number of mistakes >= max mistakes, end the game
+								if (db.hasContent(myFormat)) {
+									Cell CellFrom = (Cell) db.getContent(myFormat);
+	
+									if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
+	
+										game.getSudoku().addMistake(1);
+										System.out.println(game.getSudoku().getMistakes());
+										BuildTopGrid(game.getSudoku().getMistakes());
+	
+										if (game.getSudoku().getMistakes() >= eGD.getMaxMistakes()) {
+											BuildTopGrid("GAME OVER");
+											isRunning = false;
+											// display message
+										}
+	
+										if (game.getShowHints()) {
+	
+										}
+	
 									}
-
-									if (game.getShowHints()) {
-
-									}
-
+	
+									// This is the code that is actually taking the cell value from the drag-from
+									// cell and dropping a new Image into the dragged-to cell
+									ImageView iv = new ImageView(GetImage(CellFrom.getiCellValue()));
+									paneTarget.getCell().setiCellValue(CellFrom.getiCellValue());
+									paneTarget.getChildren().clear();
+									paneTarget.getChildren().add(iv);
+									//System.out.println(CellFrom.getiCellValue());
+									success = true;
 								}
-
-								// This is the code that is actually taking the cell value from the drag-from
-								// cell and dropping a new Image into the dragged-to cell
-								ImageView iv = new ImageView(GetImage(CellFrom.getiCellValue()));
-								paneTarget.getCell().setiCellValue(CellFrom.getiCellValue());
-								paneTarget.getChildren().clear();
-								paneTarget.getChildren().add(iv);
-								//System.out.println(CellFrom.getiCellValue());
-								success = true;
+								event.setDropCompleted(success);
+								event.consume();
 							}
-							event.setDropCompleted(success);
-							event.consume();
 						}
-
 						
 					});
 					paneTarget.setOnMouseClicked(new EventHandler<MouseEvent>() {
 						// Code tests for right click, if it is right click on cell that is originally zero, reset pane
 						public void handle(MouseEvent event) {
-							if(event.getButton() == MouseButton.SECONDARY) {
+							if(event.getButton() == MouseButton.SECONDARY && isRunning == true) {
 								int iRow = paneTarget.getCell().getiRow();
 								int iCol = paneTarget.getCell().getiCol();
 								if(originalPuzzle[iRow][iCol]==0) {
@@ -424,7 +425,6 @@ public class SudokuController implements Initializable {
 				}
 
 			}
-		}
 
 		return gridPaneSudoku;
 
