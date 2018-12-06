@@ -413,6 +413,10 @@ public class SudokuController implements Initializable {
 									//System.out.println(CellFrom.getiCellValue());
 									game.getSudoku().PrintPuzzle();
 									success = true;
+									if(game.getSudoku().isSudoku()) {
+										BuildTopGrid("You win!");
+										isRunning=false;
+									}
 								}
 								event.setDropCompleted(success);
 								event.consume();
