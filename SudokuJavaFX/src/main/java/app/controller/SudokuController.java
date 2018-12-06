@@ -1,3 +1,5 @@
+// Note: Delete works by right clicking value want to delete
+
 package app.controller;
 
 import java.io.InputStream;
@@ -385,7 +387,7 @@ public class SudokuController implements Initializable {
 									if (!s.isValidValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue())) {
 	
 										game.getSudoku().addMistake(1);
-										System.out.println(game.getSudoku().getMistakes());
+										//System.out.println(game.getSudoku().getMistakes());
 										BuildTopGrid(game.getSudoku().getMistakes());
 	
 										if (game.getSudoku().getMistakes() >= eGD.getMaxMistakes()) {
@@ -409,9 +411,9 @@ public class SudokuController implements Initializable {
 									
 									paneTarget.getChildren().clear();
 									paneTarget.getChildren().add(iv);
-									System.out.println(originalPuzzle.toString());
+									//System.out.println(originalPuzzle.toString());
 									//System.out.println(CellFrom.getiCellValue());
-									game.getSudoku().PrintPuzzle();
+									//game.getSudoku().PrintPuzzle();
 									success = true;
 									if(game.getSudoku().isSudoku()) {
 										BuildTopGrid("You win!");
