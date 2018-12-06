@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="pkgGame.Sudoku.SudokuCell" project="SudokuBLL" 
     file="/SudokuBLL/src/main/java/pkgGame/Sudoku.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="915" y="639"/>    
+    <position height="-1" width="-1" x="948" y="636"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <enumeration id="4" language="java" name="pkgEnum.ePuzzleViolation" project="SudokuBLL" 
     file="/SudokuBLL/src/main/java/pkgEnum/ePuzzleViolation.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1119" y="359"/>    
+    <position height="-1" width="-1" x="1290" y="318"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="pkgGame.Cell" project="SudokuBLL" 
     file="/SudokuBLL/src/main/java/pkgGame/Cell.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1169" y="654"/>    
+    <position height="-1" width="-1" x="1275" y="609"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -64,60 +64,64 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
-  <nesting id="8">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="3"/>  
-  </nesting>  
-  <generalization id="9">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <association id="10">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="11" name="ePuzzleViolation">        
-        <position height="0" width="0" x="123" y="-232"/>      
+  <association id="8">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="9" name="PV">        
+        <position height="0" width="0" x="146" y="-272"/>      
       </attribute>      
-      <multiplicity id="12" minimum="0" maximum="1">        
-        <position height="0" width="0" x="123" y="-232"/>      
+      <multiplicity id="10" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="146" y="-272"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="13">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <association id="14">    
+  <association id="11">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="15" name="cells">        
-        <position height="0" width="0" x="583" y="-163"/>      
+      <attribute id="12" name="cells">        
+        <position height="0" width="0" x="616" y="-166"/>      
       </attribute>      
-      <multiplicity id="16" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="583" y="-163"/>      
+      <multiplicity id="13" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="616" y="-166"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <generalization id="14">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <nesting id="15">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </nesting>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
   <association id="17">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="18" name="eGameDifficulty"/>      
-      <multiplicity id="19" minimum="0" maximum="1"/>    
+      <attribute id="18" name="eGameDifficulty">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="19" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="20">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="21" name="PV">        
-        <position height="0" width="0" x="146" y="-272"/>      
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="21" name="ePuzzleViolation">        
+        <position height="0" width="0" x="294" y="-273"/>      
       </attribute>      
-      <multiplicity id="22" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="146" y="-272"/>      
+      <multiplicity id="22" minimum="0" maximum="1">        
+        <position height="0" width="0" x="294" y="-273"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

@@ -101,9 +101,20 @@ public class SudokuController implements Initializable {
 	 */
 	private void CreateSudokuInstance() {
 		eGD = this.game.geteGameDifficulty();
-		s = game.StartSudoku(this.game.getPuzzleSize(), eGD);
-		this.originalPuzzle = this.game.getSudoku().getPuzzle();
+		this.s = game.StartSudoku(this.game.getPuzzleSize(), eGD);
+		this.originalPuzzle = createCopy();
 		isRunning = true;
+	}
+
+	private int[][] createCopy() {
+		int [][] toCopy = s.getPuzzle();
+		int [][] copy = new int[toCopy.length][toCopy[0].length];
+		for(int i=0;i<toCopy.length;i++) {
+			for(int j=0; j<toCopy[i].length; j++) {
+				copy[i][j] = toCopy[i][j];
+			}
+		}
+		return copy;
 	}
 
 	/**
@@ -393,9 +404,14 @@ public class SudokuController implements Initializable {
 									// cell and dropping a new Image into the dragged-to cell
 									ImageView iv = new ImageView(GetImage(CellFrom.getiCellValue()));
 									paneTarget.getCell().setiCellValue(CellFrom.getiCellValue());
+									
+									s.setCellValue(CellTo.getiRow(), CellTo.getiCol(), CellFrom.getiCellValue());
+									
 									paneTarget.getChildren().clear();
 									paneTarget.getChildren().add(iv);
+									System.out.println(originalPuzzle.toString());
 									//System.out.println(CellFrom.getiCellValue());
+									game.getSudoku().PrintPuzzle();
 									success = true;
 								}
 								event.setDropCompleted(success);
@@ -413,6 +429,8 @@ public class SudokuController implements Initializable {
 								if(originalPuzzle[iRow][iCol]==0) {
 									paneTarget.getChildren().clear();
 									paneTarget.getCell().setiCellValue(0);
+									s.setCellValue(iRow, iCol, 0);
+									
 									
 								}
 						

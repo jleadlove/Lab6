@@ -148,6 +148,10 @@ public class Sudoku extends LatinSquare implements Serializable {
 	public int getiSqrtSize() {
 		return iSqrtSize;
 	}
+	
+	public void setCellValue(int iRow, int iCol, int iValue) {
+		this.getPuzzle()[iRow][iCol] = iValue;
+	}
 
 	/**
 	 * RemoveCells - this method will remove cells (set them to zero) until the
